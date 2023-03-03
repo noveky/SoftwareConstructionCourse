@@ -26,7 +26,7 @@ namespace ConsoleCalculator
 					case '-': result = opr1 - opr2; break;
 					case '*': result = opr1 * opr2; break;
 					case '/': result = opr1 / opr2; break;
-					default: throw new Exception("Invalid operator.");
+					default: throw new Exception();
 				}
 				Console.WriteLine(result);
 			}
