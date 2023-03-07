@@ -19,12 +19,13 @@ namespace Assignment2
 				{
 					string? strRead;
 					int ent = -1;
-					Console.Write("Choose a module (1~4): ");
+					Console.Write("Choose a module (1~4) or enter 0 to exit: ");
 					strRead = Console.ReadLine();
 					if (strRead != null) ent = int.Parse(strRead);
 
 					switch (ent)
 					{
+						case 0: return;
 						case 1:
 							{
 								int num = -1;
