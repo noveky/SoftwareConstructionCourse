@@ -20,14 +20,14 @@ namespace ConsoleCalculator
 				Console.Write("Input operand 2 (double): ");
 				input = Console.ReadLine();
 				if (input != null) opr2 = double.Parse(input);
-				switch (opt)
+				result = opt switch
 				{
-					case '+': result = opr1 + opr2; break;
-					case '-': result = opr1 - opr2; break;
-					case '*': result = opr1 * opr2; break;
-					case '/': result = opr1 / opr2; break;
-					default: throw new Exception();
-				}
+					'+' => opr1 + opr2,
+					'-' => opr1 - opr2,
+					'*' => opr1 * opr2,
+					'/' => opr1 / opr2,
+					_ => throw new Exception(),
+				};
 				Console.WriteLine(result);
 			}
 			catch (Exception ex)
