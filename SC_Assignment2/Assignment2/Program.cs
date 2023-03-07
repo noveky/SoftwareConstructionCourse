@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SC_Assignment2
+namespace Assignment2
 {
 	public class Program
 	{
