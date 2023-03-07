@@ -95,12 +95,13 @@ namespace Assignment2
 								{
 									Console.Write("|");
 									strRead = Console.ReadLine();
-
+									
 									string[] strReads = Array.Empty<string>();
 									if (strRead != null) strReads = strRead.Trim().Split();
 									if (i == 0) n = strReads.Length;
-									else if (strReads.Length != n) throw new Exception();
+									else if (strReads.Length != n) throw new Exception(); // 矩阵输入有效性检测
 
+									// 托普利茨矩阵判定
 									if (i >= strReads.Length) continue;
 									int diagElem = int.Parse(strReads[i]);
 									if (i == 0) c = diagElem;
