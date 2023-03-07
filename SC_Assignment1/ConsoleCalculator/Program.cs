@@ -6,6 +6,9 @@ namespace ConsoleCalculator
 	{
 		public static void Main(string[] args)
 		{
+			Console.WriteLine("Simple Calculator");
+			Console.WriteLine();
+
 			double opr1 = 0, opr2 = 0, result;
 			char? opt = null;
 			string? input;
