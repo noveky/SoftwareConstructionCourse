@@ -17,11 +17,11 @@ namespace SC_Assignment2
 			{
 				try
 				{
-					string? read;
+					string? strRead;
 					int ent = -1;
 					Console.Write("Choose a module (1~4): ");
-					read = Console.ReadLine();
-					if (read != null) ent = int.Parse(read);
+					strRead = Console.ReadLine();
+					if (strRead != null) ent = int.Parse(strRead);
 
 					switch (ent)
 					{
@@ -29,8 +29,8 @@ namespace SC_Assignment2
 							{
 								int num = -1;
 								Console.Write("Enter a positive integer: ");
-								read = Console.ReadLine();
-								if (read != null) num = int.Parse(read);
+								strRead = Console.ReadLine();
+								if (strRead != null) num = int.Parse(strRead);
 								if (num <= 0) throw new Exception();
 								for (int i = 2; i <= num; ++i)
 								{
@@ -48,18 +48,18 @@ namespace SC_Assignment2
 							{
 								int max = int.MinValue, min = int.MaxValue, sum = 0;
 								Console.Write("Enter an integer array: ");
-								read = Console.ReadLine();
-								string[] strArray = Array.Empty<string>();
-								if (read != null) strArray = read.Split();
-								if (strArray.Length == 0) throw new Exception();
-								foreach (var str in strArray)
+								strRead = Console.ReadLine();
+								string[] strReads = Array.Empty<string>();
+								if (strRead != null) strReads = strRead.Trim().Split();
+								if (strReads.Length == 0) throw new Exception();
+								foreach (var str in strReads)
 								{
 									int ai = int.Parse(str);
 									max = Math.Max(max, ai);
 									min = Math.Min(min, ai);
 									sum += ai;
 								}
-								double avg = (double)sum / strArray.Length;
+								double avg = (double)sum / strReads.Length;
 								Console.WriteLine($"Max: {max} Min: {min} Avg: {avg} Sum: {sum}");
 							}
 							break;
@@ -86,29 +86,29 @@ namespace SC_Assignment2
 								int c = 0; // 托普利茨矩阵中的对角线常数
 								bool isToeplitz = true;
 								Console.Write("Enter M: ");
-								read = Console.ReadLine();
-								if (read != null) m = int.Parse(read);
+								strRead = Console.ReadLine();
+								if (strRead != null) m = int.Parse(strRead);
 								if (m < 0) throw new Exception();
 								Console.WriteLine("Enter a M*N matrix: ");
 								for (int i = 0; i < m; ++i)
 								{
 									Console.Write("|");
-									read = Console.ReadLine();
+									strRead = Console.ReadLine();
 
-									string[] strArray = Array.Empty<string>();
-									if (read != null) strArray = read.Split();
-									if (i == 0) n = strArray.Length;
-									else if (strArray.Length != n) throw new Exception();
+									string[] strReads = Array.Empty<string>();
+									if (strRead != null) strReads = strRead.Trim().Split();
+									if (i == 0) n = strReads.Length;
+									else if (strReads.Length != n) throw new Exception();
 
-									if (i >= strArray.Length) continue;
-									int diagElem = int.Parse(strArray[i]);
+									if (i >= strReads.Length) continue;
+									int diagElem = int.Parse(strReads[i]);
 									if (i == 0) c = diagElem;
 									if (diagElem != c) isToeplitz = false;
 								}
 								Console.WriteLine($"Is Toeplitz matrix: {isToeplitz}");
 							}
 							break;
-						default: break;
+						default: throw new Exception();
 					}
 				}
 				catch (Exception)
