@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Intrinsics.X86;
 
 namespace Assignment2
 {
@@ -32,47 +33,36 @@ namespace Assignment2
 								Console.Write("Enter a positive integer: ");
 								strRead = Console.ReadLine();
 								if (strRead != null) num = int.Parse(strRead);
-								if (num <= 0) throw new Exception();
-								for (int i = 2; i <= num; ++i)
+								List<int> facs = Problem1(num);
+								foreach (var fac in facs)
 								{
-									if (num % i == 0)
-									{
-										Console.Write($"{i} ");
-										num /= i;
-									}
-									while (num % i == 0) num /= i;
+									Console.Write($"{fac} ");
 								}
 								Console.WriteLine();
 							}
 							break;
 						case 2:
 							{
-								int max = int.MinValue, min = int.MaxValue, sum = 0;
 								Console.Write("Enter an integer array: ");
 								strRead = Console.ReadLine();
 								string[] strReads = Array.Empty<string>();
 								if (strRead != null) strReads = strRead.Trim().Split();
 								if (strReads.Length == 0) throw new Exception();
-								foreach (var str in strReads)
+								int[] arr = new int[strReads.Length];
+								for (int i = 0; i < strReads.Length; ++i)
 								{
-									int ai = int.Parse(str);
-									max = Math.Max(max, ai);
-									min = Math.Min(min, ai);
-									sum += ai;
+									int ai = int.Parse(strReads[i]);
+									arr[i] = ai;
 								}
-								double avg = (double)sum / strReads.Length;
-								Console.WriteLine($"Max: {max} Min: {min} Avg: {avg} Sum: {sum}");
+								List<object> result = Problem2(arr);
+								Console.WriteLine($"Max: {result[0]} Min: {result[1]} Avg: {result[2]} Sum: {result[3]}");
 							}
 							break;
 						case 3:
 							{
 								int num = 100;
 								int[] arr = new int[num + 1]; // 等于0表示被筛去
-								for (int i = 2; i <= num; ++i) arr[i] = i;
-								for (int i = 2; i <= num; ++i)
-								{
-									for (int j = i * i; j <= num; j += i) arr[j] = 0;
-								}
+								Problem3(arr);
 								Console.Write("Primes in range 2~100: [");
 								foreach (var i in arr)
 								{
@@ -83,30 +73,38 @@ namespace Assignment2
 							break;
 						case 4:
 							{
-								int m = -1, n = 0;
-								int c = 0; // 托普利茨矩阵中的对角线常数
-								bool isToeplitz = true;
+								int M = -1, N = 0;
 								Console.Write("Enter M: ");
 								strRead = Console.ReadLine();
-								if (strRead != null) m = int.Parse(strRead);
-								if (m < 0) throw new Exception();
+								if (strRead != null) M = int.Parse(strRead);
+								if (M < 0) throw new Exception();
 								Console.WriteLine("Enter a M*N matrix: ");
-								for (int i = 0; i < m; ++i)
+								List<int>[] rows = new List<int>[M];
+								for (int i = 0; i < M; ++i)
 								{
 									Console.Write("|");
 									strRead = Console.ReadLine();
 									
-									string[] strReads = Array.Empty<string>();
-									if (strRead != null) strReads = strRead.Trim().Split();
-									if (i == 0) n = strReads.Length;
-									else if (strReads.Length != n) throw new Exception(); // 矩阵输入有效性检测
+									string[] strElems = Array.Empty<string>();
+									if (strRead != null) strElems = strRead.Trim().Split();
+									if (i == 0) N = strElems.Length;
+									else if (strElems.Length != N) throw new Exception(); // 矩阵输入有效性检测
 
-									// 托普利茨矩阵判定
-									if (i >= strReads.Length) continue;
-									int diagElem = int.Parse(strReads[i]);
-									if (i == 0) c = diagElem;
-									if (diagElem != c) isToeplitz = false;
+									rows[i] = new List<int>();
+									foreach (var strElem in strElems)
+									{
+										rows[i].Add(int.Parse(strElem));
+									}
 								}
+								int[,] matrix = new int[M, N];
+								for (int i = 0; i < M; ++i)
+								{
+									for (int j = 0; j < N; ++j)
+									{
+										matrix[i, j] = rows[i][j];
+									}
+								}
+								bool isToeplitz = Problem4(matrix);
 								Console.WriteLine($"Is Toeplitz matrix: {isToeplitz}");
 							}
 							break;
@@ -119,6 +117,67 @@ namespace Assignment2
 				}
 				Console.WriteLine();
 			}
+		}
+
+		static List<int> Problem1(int num)
+		{
+			if (num <= 0) throw new Exception();
+			List<int> facs = new List<int>();
+			for (int i = 2; i <= num; ++i)
+			{
+				if (num % i == 0)
+				{
+					facs.Add(i);
+					num /= i;
+				}
+				while (num % i == 0) num /= i;
+			}
+			return facs;
+		}
+
+		static List<object> Problem2(int[] arr)
+		{
+			List<object> ret = new List<object>();
+			int max = int.MinValue, min = int.MaxValue, sum = 0;
+			foreach (var ai in arr)
+			{
+				max = Math.Max(max, ai);
+				min = Math.Min(min, ai);
+				sum += ai;
+			}
+			double avg = (double)sum / arr.Length;
+			ret.Add(max);
+			ret.Add(min);
+			ret.Add(avg);
+			ret.Add(sum);
+			return ret;
+		}
+
+		static void Problem3(int[] arr)
+		{
+			int num = arr.Length - 1;
+			for (int i = 2; i <= num; ++i) arr[i] = i;
+			for (int i = 2; i <= num; ++i)
+			{
+				for (int j = i * i; j <= num; j += i) arr[j] = 0;
+			}
+		}
+
+		static bool Problem4(int[,] matrix)
+		{
+			int M = matrix.GetLength(0);
+			int N = matrix.GetLength(1);
+			int c = 0; // 托普利茨矩阵中的对角线常数
+			bool isToeplitz = true;
+			for (int i = 0; i < M; ++i)
+			{
+				// 托普利茨矩阵判定
+				if (i >= N) continue;
+				int diagElem = matrix[i, i];
+				if (i == 0) c = diagElem;
+				if (diagElem != c) isToeplitz = false;
+			}
+			return isToeplitz;
 		}
 	}
 }
