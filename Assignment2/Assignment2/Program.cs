@@ -210,7 +210,6 @@ namespace Assignment2
 			bool isToeplitz = true;
 			for (int i = 0; i < M; ++i)
 			{
-				// 托普利茨矩阵判定
 				if (i >= N) continue;
 				int diagElem = matrix[i, i];
 				if (i == 0) c = diagElem;
